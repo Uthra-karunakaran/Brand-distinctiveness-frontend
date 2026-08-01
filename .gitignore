@@ -1,0 +1,40 @@
+# This folder has no .git of its own -- it sits inside a git repo rooted at
+# the home directory (see RUNNING.md / conversation history if that ever
+# needs revisiting). This file is still respected by git no matter where the
+# repo root is, so it's the safety net for everything under this path.
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Env files -- never commit a real key
+.env
+.env.*
+!.env.example
+
+# Claude Code: settings.local.json is per-machine (command allowlists, local
+# paths) and not meant to be shared. settings.json (if ever added) is fine to
+# commit.
+.claude/settings.local.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor / OS cruft
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
