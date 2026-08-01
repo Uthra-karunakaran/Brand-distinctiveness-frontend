@@ -81,6 +81,6 @@ console.log(`tween          : ${tweened ? "REAL ✓ (caught in flight)" : "snapp
 console.log(`ghost held     : ${movers.length === 1 ? "✓ only the live dot moved" : "✗ " + movers.length + " moved"}`);
 console.log(`changes listed : ${await page.$$eval(".changes li", (n) => n.length)}`);
 console.log(`hOverflow      : ${await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)}px`);
-await page.screenshot({ path: `${process.argv[2] ?? "."}/loci-rewrite.png`, fullPage: true });
+await page.screenshot({ path: `${process.argv[2] ?? "."}/locify-rewrite.png`, fullPage: true });
 console.log(errs.length ? `\nERRORS: ${errs.join("; ")}` : "\nno page errors");
 await browser.close();

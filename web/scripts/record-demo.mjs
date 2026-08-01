@@ -193,7 +193,7 @@ try {
 
 const file = fs.readdirSync(OUT).find((f) => f.endsWith(".webm"));
 if (file) {
-  const target = path.join(OUT, live ? "loci-demo.webm" : "loci-demo-fallback.webm");
+  const target = path.join(OUT, live ? "locify-demo.webm" : "locify-demo-fallback.webm");
   fs.renameSync(path.join(OUT, file), target);
   const mb = (fs.statSync(target).size / 1e6).toFixed(1);
   console.log(`\nwrote ${target}  (${mb} MB)`);

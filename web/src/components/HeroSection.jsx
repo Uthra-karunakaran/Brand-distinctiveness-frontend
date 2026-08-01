@@ -14,7 +14,7 @@ export default function HeroSection({ report }) {
   return (
     <div className="hero-section">
       <div className="hero-eyebrow">
-        <span className="eyebrow"> At a glance</span>
+        <span className="eyebrow">Snapshot</span>
         <h1 className="hero-brand">{report.brand}</h1>
       </div>
 
@@ -24,7 +24,7 @@ export default function HeroSection({ report }) {
             className="hero-card-label"
             title="Weighted average across identity, messaging and voice: how closely this copy's language, tone and structure match the brand's own."
           >
-            Consistency
+            On-Brand Score
           </span>
           <CircularProgress value={report.overall_consistency} color="var(--series-1)" />
           <span className="hero-caption">How closely this sounds like the brand</span>
@@ -35,7 +35,7 @@ export default function HeroSection({ report }) {
             className="hero-card-label"
             title="Weighted average across identity, messaging and voice: how far this copy sits from generic category language and competitor phrasing."
           >
-            Distinctiveness
+            Stand-Out Score
           </span>
           <CircularProgress value={report.overall_distinctiveness} color="var(--series-3)" />
           <span className="hero-caption">How far this sits from category boilerplate</span>
@@ -49,7 +49,7 @@ export default function HeroSection({ report }) {
             className="hero-card-label"
             title="Where consistency and distinctiveness intersect: Ideal (both high), On-brand but generic (consistent, not distinctive), Unique but off-brand (distinctive, not consistent), or Lost (neither)."
           >
-            Quadrant
+            Verdict
           </span>
           {/* Fixed to the same 128px box CircularProgress renders, so the
               badge sits at exactly the height the rings do in the other two

@@ -7,7 +7,7 @@
 
 export const DEMO_TEXTS = [
   {
-    label: "Generic SaaS copy",
+    label: "Sample: Generic SaaS Text",
     text:
       "In today's fast-paced world, businesses need cutting-edge solutions that " +
       "deliver seamless experiences. Our innovative platform empowers teams to " +
@@ -15,7 +15,7 @@ export const DEMO_TEXTS = [
       "infrastructure designed to elevate your workflow.",
   },
   {
-    label: "Streak reminder",
+    label: "Sample: Streak Reminder",
     text: "Your streak is 47 days old. Do not let a Tuesday kill it.",
   },
   {
@@ -26,7 +26,7 @@ export const DEMO_TEXTS = [
       "to keep you motivated.",
   },
   {
-    label: "Distinctive, off-brand",
+    label: "Sample: Bold but Off-Brand",
     text:
       "Language acquisition is a discipline, not a diversion. Our curriculum is " +
       "derived from forty years of applied linguistics research and is " +

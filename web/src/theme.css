@@ -1,4 +1,4 @@
-/* Loci design system.
+/* Locify design system.
  *
  * Colour rules that are NOT taste calls and must not be "cleaned up":
  *
@@ -192,10 +192,14 @@ body {
 }
 
 .mark {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background: var(--series-1);
+  width: 23px;
+  height: 23px;
+  border-radius: 6.5px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--series-1) 76%, #fff) 0%,
+    color-mix(in srgb, var(--series-1) 88%, #000) 100%
+  );
   display: grid;
   place-items: center;
   flex: none;
@@ -384,19 +388,39 @@ button.quiet:hover:not(:disabled) {
   filter: none;
 }
 
-.kbd {
-  font: 500 10px/1 var(--mono);
-  padding: 3px 5px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+/* Segmented control: every option visible, current one tinted. Used for the
+   theme switch, where a dropdown hid two of three states behind a click. */
+.seg {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
 }
-button.ghost .kbd,
-button.quiet .kbd {
-  background: var(--surface-sunken);
-  border-color: var(--line);
+.seg-btn {
+  width: 32px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
   color: var(--text-3);
+  display: grid;
+  place-items: center;
+  transition: background 140ms var(--ease), color 140ms var(--ease);
 }
+.seg-btn:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--text);
+  filter: none;
+}
+.seg-btn:active:not(:disabled) { transform: none; }
+.seg-btn[aria-pressed="true"] {
+  background: var(--series-1-soft);
+  color: var(--series-1);
+}
+.seg-btn svg { display: block; }
 
 select {
   font: 500 var(--t-small)/1 var(--font);
@@ -453,6 +477,28 @@ textarea:focus {
   align-items: center;
   gap: 7px;
 }
+
+/* A select wearing a leading icon: the icon sits over the padded-out select
+   rather than beside it, so the whole thing stays one hit target. */
+.field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.field .field-icon {
+  position: absolute;
+  left: 10px;
+  display: grid;
+  place-items: center;
+  color: var(--text-3);
+  pointer-events: none;
+  transition: color 140ms var(--ease);
+}
+.field select {
+  padding-left: 32px;
+  font-weight: 560;
+}
+.field:hover .field-icon { color: var(--series-1); }
 
 /* ══════════════════════════════════════════════════════ tables */
 

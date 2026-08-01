@@ -1,3 +1,5 @@
+import { layerLabel } from "../lib/layerLabels";
+
 /* Bottom-of-page layer comparison: one pillar per layer, consistency and
  * distinctiveness as two bars growing from a shared baseline, so a reader
  * can compare all three layers' shape at a glance rather than reading three
@@ -17,17 +19,17 @@ export default function LayerComparison({ layers }) {
               <div className="pillar-track">
                 <div className="pillar-fill" style={{ height: `${l.consistency}%`, background: "var(--series-1)" }} />
               </div>
-              <span className="pillar-caption">Consistency</span>
+              <span className="pillar-caption">On-Brand Score</span>
             </div>
             <div className="pillar-bar">
               <span className="pillar-value">{l.distinctiveness}</span>
               <div className="pillar-track">
                 <div className="pillar-fill" style={{ height: `${l.distinctiveness}%`, background: "var(--series-3)" }} />
               </div>
-              <span className="pillar-caption">Distinctiveness</span>
+              <span className="pillar-caption">Stand-Out Score</span>
             </div>
           </div>
-          <span className="pillar-title">{l.layer}</span>
+          <span className="pillar-title">{layerLabel(l.layer)}</span>
         </div>
       ))}
 

@@ -14,23 +14,23 @@ export default function FinalSummary({ report }) {
     >
       <div className="fs-metrics">
         <div className="fs-metric">
-          <span className="fs-label">Overall consistency</span>
+          <span className="fs-label">Overall On-Brand Score</span>
           <span className="fs-value">{report.overall_consistency}</span>
         </div>
         <div className="fs-metric">
-          <span className="fs-label">Overall distinctiveness</span>
+          <span className="fs-label">Overall Stand-Out Score</span>
           <span className="fs-value">{report.overall_distinctiveness}</span>
         </div>
       </div>
 
       <div className="fs-quadrant-row">
-        <span className="fs-quadrant-label">Quadrant</span>
+        <span className="fs-quadrant-label">Verdict</span>
         <p className="fs-note">{report.overall_note}</p>
       </div>
 
       {q.insight && (
         <div className="fs-callout">
-          <span className="fs-callout-label">Executive insight</span>
+          <span className="fs-callout-label">The Bottom Line</span>
           <p className="fs-insight">{q.insight}</p>
         </div>
       )}

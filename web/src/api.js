@@ -1,6 +1,6 @@
 import axios from "axios";
 
-/* The Loci scorer API.
+/* The Locify scorer API.
  *
  *   GET  /brands               -> the brand catalog
  *   POST /brands/{slug}/score  -> a per-layer Report

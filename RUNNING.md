@@ -1,6 +1,6 @@
 # Running the frontend
 
-This repo is **frontend only**. It talks to the Loci scoring API you run
+This repo is **frontend only**. It talks to the Locify scoring API you run
 yourself on port 8001.
 
 ```sh

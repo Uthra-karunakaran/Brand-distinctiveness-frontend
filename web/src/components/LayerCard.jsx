@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ExpandableCard from "./ExpandableCard";
 import { quadrantMeta, quadrantSoft } from "../lib/quadrant";
+import { layerLabel } from "../lib/layerLabels";
 
 /* Section 2 -- Why It Scored This Way.
  *
@@ -20,31 +21,31 @@ import { quadrantMeta, quadrantSoft } from "../lib/quadrant";
 
 const AXIS_META = {
   centroid_consistency: {
-    label: "Semantic Match",
+    label: "Meaning Match",
     tooltip: "Cosine similarity of this copy's meaning to the brand's own writing.",
   },
   lexical_sig: {
-    label: "Signature Language",
+    label: "Brand Phrases",
     tooltip: "Use of words and phrases this brand disproportionately uses.",
   },
   tone: {
-    label: "Tone",
-    tooltip: "Match to the brand's tone profile across five axes (see Tone analysis).",
+    label: "Tone Match",
+    tooltip: "Match to the brand's tone profile across five axes (see Personality Sliders).",
   },
   structural: {
-    label: "Structural Style",
+    label: "Writing Style",
     tooltip: "Match to the brand's sentence length, readability and punctuation patterns.",
   },
   centroid_distinctiveness: {
-    label: "Generic Language",
+    label: "Generic Score",
     tooltip: "Cosine distance from generic category / competitor writing.",
   },
   lexical_cliche: {
-    label: "Cliché Avoidance",
+    label: "Originality",
     tooltip: "Absence of stock category phrases (\"cutting-edge\", \"unlock your potential\", ...).",
   },
   lexical_div: {
-    label: "Lexical Diversity",
+    label: "Word Variety",
     tooltip: "Vocabulary range — how repetitive the word choice is.",
   },
 };
@@ -59,7 +60,7 @@ function recipeRows(contributions, axis) {
     .sort((a, b) => b.weight - a.weight);
 }
 
-const TABS = ["Overview", "Semantics", "Signature Language", "Category Clichés", "Lexical Diversity"];
+const TABS = ["Overview", "Meaning Match", "Brand Phrases", "Industry Buzzwords", "Word Variety"];
 
 function Recipe({ title, rows }) {
   return (
@@ -153,7 +154,7 @@ export default function LayerCard({ layer, evidence }) {
     <ExpandableCard
       title={
         <>
-          <span className="exp-title">{layer.layer}</span>
+          <span className="exp-title">{layerLabel(layer.layer)}</span>
           <span
             className="layer-quadrant-chip"
             style={{ "--q": q.color, "--q-soft": quadrantSoft(q.color) }}
@@ -165,12 +166,12 @@ export default function LayerCard({ layer, evidence }) {
       headerRight={
         <>
           <div className="mini-metric">
-            <span className="mini-label" title={`How closely this ${layer.layer} copy sounds like the brand.`}>Consistency</span>
+            <span className="mini-label" title={`How closely this ${layerLabel(layer.layer)} copy sounds like the brand.`}>On-Brand Score</span>
             <div className="mini-track"><div className="mini-fill" style={{ width: `${layer.consistency}%`, background: "var(--series-1)" }} /></div>
             <span className="mini-value">{layer.consistency}</span>
           </div>
           <div className="mini-metric">
-            <span className="mini-label" title={`How far this ${layer.layer} copy sits from category boilerplate.`}>Distinctiveness</span>
+            <span className="mini-label" title={`How far this ${layerLabel(layer.layer)} copy sits from category boilerplate.`}>Stand-Out Score</span>
             <div className="mini-track"><div className="mini-fill" style={{ width: `${layer.distinctiveness}%`, background: "var(--series-3)" }} /></div>
             <span className="mini-value">{layer.distinctiveness}</span>
           </div>
@@ -192,33 +193,33 @@ export default function LayerCard({ layer, evidence }) {
       {tab === "Overview" && (
         <div className="tab-panel">
           <div className="overview-quadrant">
-            <span className="overview-quadrant-label">Quadrant</span>
+            <span className="overview-quadrant-label">Verdict</span>
             <p className="quadrant-note">{layer.quadrant_note}</p>
           </div>
           <div className="recipes">
-            <Recipe title="Consistency recipe" rows={consRows} />
-            <Recipe title="Distinctiveness recipe" rows={distRows} />
+            <Recipe title="How Much It Sounds Like You" rows={consRows} />
+            <Recipe title="How Much It Stands Out" rows={distRows} />
           </div>
         </div>
       )}
-      {tab === "Semantics" && <SemanticsTab vsBrand={raw.vs_brand} vsGeneric={raw.vs_generic} />}
-      {tab === "Signature Language" && (
+      {tab === "Meaning Match" && <SemanticsTab vsBrand={raw.vs_brand} vsGeneric={raw.vs_generic} />}
+      {tab === "Brand Phrases" && (
         <TermsTab
           terms={evidence.signature_terms_used}
-          empty="No signature language detected."
+          empty="No brand phrases detected."
           score={sigScore}
-          scoreLabel="This layer's weight on signature language"
+          scoreLabel="This layer's weight on brand phrases"
         />
       )}
-      {tab === "Category Clichés" && (
+      {tab === "Industry Buzzwords" && (
         <TermsTab
           terms={evidence.cliches_detected}
-          empty="No clichés detected."
+          empty="No industry buzzwords detected."
           score={clicheScore}
-          scoreLabel="This layer's weight on cliché avoidance"
+          scoreLabel="This layer's weight on originality"
         />
       )}
-      {tab === "Lexical Diversity" && <DiversityTab overall={evidence.lexical_diversity} />}
+      {tab === "Word Variety" && <DiversityTab overall={evidence.lexical_diversity} />}
     </ExpandableCard>
 
     {/* Rendered as a sibling of ExpandableCard, not inside its children --

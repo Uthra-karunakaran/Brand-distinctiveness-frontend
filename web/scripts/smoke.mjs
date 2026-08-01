@@ -42,6 +42,6 @@ await page.selectOption('select[aria-label="Brand"]', "");
 await page.waitForTimeout(3000);
 console.log(`no-brand BDI     : ${await page.textContent(".gauge-value")} (expect —)`);
 
-await page.screenshot({ path: "/tmp/shots/loci-table.png", fullPage: true });
+await page.screenshot({ path: "/tmp/shots/locify-table.png", fullPage: true });
 console.log(errs.length ? `\nERRORS: ${errs.join("; ")}` : "\nno page errors");
 await browser.close();

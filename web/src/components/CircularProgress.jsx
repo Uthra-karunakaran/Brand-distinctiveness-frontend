@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
  * which is what makes three of these read as a dashboard rather than a
  * spec sheet. */
 export default function CircularProgress({
-  value, size = 128, thickness = 10, color = "var(--series-1)", digits = 0,
+  value, size = 128, thickness = 10, color = "var(--series-1)", digits = 0, suffix = "",
 }) {
   const [display, setDisplay] = useState(0);
   const mounted = useRef(false);
@@ -39,6 +39,7 @@ export default function CircularProgress({
       <div className="ring-center">
         <span className="ring-value">
           {value === null || value === undefined ? "—" : value.toFixed(digits)}
+          {value === null || value === undefined ? "" : <span className="ring-suffix">{suffix}</span>}
         </span>
       </div>
       <style>{`
@@ -53,6 +54,7 @@ export default function CircularProgress({
           font-size: 30px; font-weight: 640; letter-spacing: -0.02em;
           line-height: 1; font-variant-numeric: tabular-nums; color: var(--text);
         }
+        .ring-suffix { font-size: 0.5em; font-weight: 620; color: var(--text-3); margin-left: 1px; }
         @media (prefers-reduced-motion: reduce) { .ring-arc { transition: none; } }
       `}</style>
     </div>

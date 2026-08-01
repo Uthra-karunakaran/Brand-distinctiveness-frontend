@@ -19,7 +19,7 @@ for (const theme of ["light", "dark"]) {
   const marks = await page.$$eval("mark.hl", (n) => n.length);
   const dots = await page.$$eval(".recharts-scatter-symbol", (n) => n.length);
   console.log(`${theme}: BDI=${bdi} bars=${bars} highlights=${marks} scatterDots=${dots} hOverflow=${overflow}px`);
-  await page.screenshot({ path: `${OUT}/loci-${theme}.png`, fullPage: true });
+  await page.screenshot({ path: `${OUT}/locify-${theme}.png`, fullPage: true });
   await page.close();
 }
 await browser.close();
