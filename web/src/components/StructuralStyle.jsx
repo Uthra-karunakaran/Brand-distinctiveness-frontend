@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ExpandableCard from "./ExpandableCard";
 
 /* Section 3 -- Writing Style & Tone -> Structural Style.
  *
@@ -7,6 +8,11 @@ import { useState } from "react";
  * the input sits from the brand's envelope; the colour bands (green <1,
  * yellow 1-2, red >2) are the one interpretive rule this component adds, and
  * they are stated as such in the legend rather than left implicit.
+ *
+ * Renders through ExpandableCard -- the same full-width, click-to-expand row
+ * chrome the per-layer cards use -- so this reads as one more row in the same
+ * family rather than a narrower side panel. "View details" toggles the table
+ * *inside* the expanded row, it does not control the row itself.
  */
 
 const METRIC_META = {
@@ -49,53 +55,60 @@ export default function StructuralStyle({ style }) {
   if (!entries.length) return null;
 
   return (
-    <div className="structural">
-      <div className="chip-deck">
-        {entries.map(([k, f]) => {
-          const c = chipFor(k, f);
-          const title = `Input ${f.input.toFixed(2)} vs brand ${f.brand_mean.toFixed(2)} (z=${f.z.toFixed(2)}).`;
-          return (
-            <span key={k} className={`dev-chip ${c.tone}`} title={title}>
-              <span className="dev-icon">{c.icon}</span> {c.text}
-            </span>
-          );
-        })}
-      </div>
-
-      <button className="ghost view-details" onClick={() => setShowTable((v) => !v)}>
-        {showTable ? "Hide details" : "View details"}
-      </button>
-
-      {showTable && (
-        <div className="scroll-x details-table">
-          <table>
-            <thead>
-              <tr><th>Metric</th><th className="num">Input</th><th className="num">Brand</th><th className="num">Z-score</th></tr>
-            </thead>
-            <tbody>
-              {entries.map(([k, f]) => (
-                <tr key={k}>
-                  <td>{METRIC_META[k].table}</td>
-                  <td className="num">{f.input.toFixed(2)}</td>
-                  <td className="num">{f.brand_mean.toFixed(2)}</td>
-                  <td className="num">
-                    <span className="z-value">
-                      <span className="z-dot" style={{ background: zColor(f.z) }} />
-                      {f.z.toFixed(2)}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="z-legend">
-            <span><span className="z-dot" style={{ background: "var(--positive)" }} /> &lt; 1 matches</span>
-            <span><span className="z-dot" style={{ background: "var(--series-2)" }} /> 1–2 differs</span>
-            <span><span className="z-dot" style={{ background: "var(--negative)" }} /> &gt; 2 differs a lot</span>
-          </div>
+    <>
+    <ExpandableCard title={<span className="exp-title">Structural style</span>}>
+      <div className="structural">
+        <div className="chip-deck">
+          {entries.map(([k, f]) => {
+            const c = chipFor(k, f);
+            const title = `Input ${f.input.toFixed(2)} vs brand ${f.brand_mean.toFixed(2)} (z=${f.z.toFixed(2)}).`;
+            return (
+              <span key={k} className={`dev-chip ${c.tone}`} title={title}>
+                <span className="dev-icon">{c.icon}</span> {c.text}
+              </span>
+            );
+          })}
         </div>
-      )}
 
+        <button className="ghost view-details" onClick={() => setShowTable((v) => !v)}>
+          {showTable ? "Hide details" : "View details"}
+        </button>
+
+        {showTable && (
+          <div className="scroll-x details-table">
+            <table>
+              <thead>
+                <tr><th>Metric</th><th className="num">Input</th><th className="num">Brand</th><th className="num">Z-score</th></tr>
+              </thead>
+              <tbody>
+                {entries.map(([k, f]) => (
+                  <tr key={k}>
+                    <td>{METRIC_META[k].table}</td>
+                    <td className="num">{f.input.toFixed(2)}</td>
+                    <td className="num">{f.brand_mean.toFixed(2)}</td>
+                    <td className="num">
+                      <span className="z-value">
+                        <span className="z-dot" style={{ background: zColor(f.z) }} />
+                        {f.z.toFixed(2)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="z-legend">
+              <span><span className="z-dot" style={{ background: "var(--positive)" }} /> &lt; 1 matches</span>
+              <span><span className="z-dot" style={{ background: "var(--series-2)" }} /> 1–2 differs</span>
+              <span><span className="z-dot" style={{ background: "var(--negative)" }} /> &gt; 2 differs a lot</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </ExpandableCard>
+
+    {/* Sibling of ExpandableCard, not inside its children -- children only
+        mount while the row is open, so a <style> tag nested there would be
+        removed from the DOM every time the row collapses. */}
       <style>{`
         .structural { display: flex; flex-direction: column; gap: 14px; }
         .chip-deck { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -120,6 +133,6 @@ export default function StructuralStyle({ style }) {
         }
         .z-legend span { display: inline-flex; align-items: center; gap: 6px; }
       `}</style>
-    </div>
+    </>
   );
 }

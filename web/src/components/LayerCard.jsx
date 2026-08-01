@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ExpandableCard from "./ExpandableCard";
 import { quadrantMeta, quadrantSoft } from "../lib/quadrant";
 
 /* Section 2 -- Why It Scored This Way.
@@ -12,6 +13,9 @@ import { quadrantMeta, quadrantSoft } from "../lib/quadrant";
  * them once per document -- what differs per layer is how much weight that
  * layer's own recipe puts on the corresponding metric, which is what the
  * score bar underneath the chips shows.
+ *
+ * The expand/collapse chrome itself lives in ExpandableCard, shared with the
+ * Structural Style row so both read as one family.
  */
 
 const AXIS_META = {
@@ -123,16 +127,10 @@ function TermsTab({ terms, empty, score, scoreLabel }) {
 
 function DiversityTab({ overall }) {
   const pct = overall ?? 0;
-  const leaves = Math.round((pct / 100) * 5);
   return (
     <div className="tab-panel diversity">
       <div className="diversity-cluster">
         <span className="diversity-title">Vocabulary Richness</span>
-        <div className="leaves" aria-hidden="true">
-          {Array.from({ length: 5 }, (_, i) => (
-            <span key={i} className={i < leaves ? "leaf on" : "leaf"}>🌱</span>
-          ))}
-        </div>
         <span className="diversity-value">{Math.round(pct)}</span>
       </div>
       <p className="helper">Higher diversity generally indicates more original language.</p>
@@ -141,7 +139,6 @@ function DiversityTab({ overall }) {
 }
 
 export default function LayerCard({ layer, evidence }) {
-  const [open, setOpen] = useState(false);
   const [tab, setTab] = useState(TABS[0]);
   const q = quadrantMeta(layer.quadrant);
 
@@ -152,13 +149,21 @@ export default function LayerCard({ layer, evidence }) {
   const clicheScore = layer.contributions?.distinctiveness?.lexical_cliche?.value ?? null;
 
   return (
-    <div className="layer-card" style={{ "--q": q.color, "--q-soft": quadrantSoft(q.color) }}>
-      <button className="layer-head" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
-        <div className="layer-head-left">
-          <span className="layer-name">{layer.layer}</span>
-          <span className="layer-quadrant-chip">{q.icon} {q.label}</span>
-        </div>
-        <div className="layer-head-right">
+    <>
+    <ExpandableCard
+      title={
+        <>
+          <span className="exp-title">{layer.layer}</span>
+          <span
+            className="layer-quadrant-chip"
+            style={{ "--q": q.color, "--q-soft": quadrantSoft(q.color) }}
+          >
+            {q.icon} {q.label}
+          </span>
+        </>
+      }
+      headerRight={
+        <>
           <div className="mini-metric">
             <span className="mini-label" title={`How closely this ${layer.layer} copy sounds like the brand.`}>Consistency</span>
             <div className="mini-track"><div className="mini-fill" style={{ width: `${layer.consistency}%`, background: "var(--series-1)" }} /></div>
@@ -169,80 +174,63 @@ export default function LayerCard({ layer, evidence }) {
             <div className="mini-track"><div className="mini-fill" style={{ width: `${layer.distinctiveness}%`, background: "var(--series-3)" }} /></div>
             <span className="mini-value">{layer.distinctiveness}</span>
           </div>
-          <span className="chevron">{open ? "−" : "+"}</span>
-        </div>
-      </button>
+        </>
+      }
+    >
+      <div className="tabs" role="tablist">
+        {TABS.map((t) => (
+          <button
+            key={t} role="tab" aria-selected={tab === t}
+            className={`tab${tab === t ? " active" : ""}`}
+            onClick={() => setTab(t)}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
 
-      {open && (
-        <div className="layer-body">
-          <div className="tabs" role="tablist">
-            {TABS.map((t) => (
-              <button
-                key={t} role="tab" aria-selected={tab === t}
-                className={`tab${tab === t ? " active" : ""}`}
-                onClick={() => setTab(t)}
-              >
-                {t}
-              </button>
-            ))}
+      {tab === "Overview" && (
+        <div className="tab-panel">
+          <div className="overview-quadrant">
+            <span className="overview-quadrant-label">Quadrant</span>
+            <p className="quadrant-note">{layer.quadrant_note}</p>
           </div>
-
-          {tab === "Overview" && (
-            <div className="tab-panel">
-              <div className="overview-quadrant">
-                <span className="overview-quadrant-label">Quadrant</span>
-                <p className="quadrant-note">{layer.quadrant_note}</p>
-              </div>
-              <div className="recipes">
-                <Recipe title="Consistency recipe" rows={consRows} />
-                <Recipe title="Distinctiveness recipe" rows={distRows} />
-              </div>
-            </div>
-          )}
-          {tab === "Semantics" && <SemanticsTab vsBrand={raw.vs_brand} vsGeneric={raw.vs_generic} />}
-          {tab === "Signature Language" && (
-            <TermsTab
-              terms={evidence.signature_terms_used}
-              empty="No signature language detected."
-              score={sigScore}
-              scoreLabel="This layer's weight on signature language"
-            />
-          )}
-          {tab === "Category Clichés" && (
-            <TermsTab
-              terms={evidence.cliches_detected}
-              empty="No clichés detected."
-              score={clicheScore}
-              scoreLabel="This layer's weight on cliché avoidance"
-            />
-          )}
-          {tab === "Lexical Diversity" && <DiversityTab overall={evidence.lexical_diversity} />}
+          <div className="recipes">
+            <Recipe title="Consistency recipe" rows={consRows} />
+            <Recipe title="Distinctiveness recipe" rows={distRows} />
+          </div>
         </div>
       )}
+      {tab === "Semantics" && <SemanticsTab vsBrand={raw.vs_brand} vsGeneric={raw.vs_generic} />}
+      {tab === "Signature Language" && (
+        <TermsTab
+          terms={evidence.signature_terms_used}
+          empty="No signature language detected."
+          score={sigScore}
+          scoreLabel="This layer's weight on signature language"
+        />
+      )}
+      {tab === "Category Clichés" && (
+        <TermsTab
+          terms={evidence.cliches_detected}
+          empty="No clichés detected."
+          score={clicheScore}
+          scoreLabel="This layer's weight on cliché avoidance"
+        />
+      )}
+      {tab === "Lexical Diversity" && <DiversityTab overall={evidence.lexical_diversity} />}
+    </ExpandableCard>
 
+    {/* Rendered as a sibling of ExpandableCard, not inside its children --
+        children only mount into the DOM while the row is open, so a <style>
+        tag nested there would vanish every time the row collapses, taking
+        the always-visible header badge and mini-metric styling with it. */}
       <style>{`
-        .layer-card {
-          background: var(--surface); border: 1px solid var(--line);
-          border-radius: var(--r-lg); box-shadow: var(--e1); overflow: hidden;
-        }
-        .layer-head {
-          width: 100%; display: flex; align-items: center; justify-content: space-between;
-          gap: 16px; padding: 18px 22px; background: transparent; border: none;
-          border-radius: 0; color: var(--text); text-align: left; height: auto;
-          font: inherit; cursor: pointer;
-        }
-        .layer-head:hover { background: var(--surface-hover); }
-        .layer-head-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
-        .layer-name {
-          font-size: var(--t-lead); font-weight: 620; text-transform: capitalize;
-          color: var(--text);
-        }
         .layer-quadrant-chip {
           font-size: var(--t-tiny); font-weight: 560; color: var(--q);
           background: var(--q-soft); border-radius: var(--r-pill);
           padding: 3px 10px; white-space: nowrap;
         }
-        .layer-head-right { display: flex; align-items: center; gap: 18px; flex: none; }
         .mini-metric { display: flex; align-items: center; gap: 8px; }
         .mini-label {
           font-size: var(--t-lead); font-weight: 620; color: var(--text);
@@ -257,12 +245,7 @@ export default function LayerCard({ layer, evidence }) {
           font-size: var(--t-small); font-weight: 620; color: var(--text);
           font-variant-numeric: tabular-nums; width: 30px; text-align: right;
         }
-        .chevron {
-          font-size: 18px; color: var(--text-3); width: 20px; text-align: center;
-          font-variant-numeric: normal;
-        }
 
-        .layer-body { border-top: 1px solid var(--line); padding: 18px 22px 22px; }
         .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 16px; }
         .tab {
           background: transparent; color: var(--text-3); border: 1px solid transparent;
@@ -327,25 +310,20 @@ export default function LayerCard({ layer, evidence }) {
         .score-fill { height: 100%; border-radius: var(--r-pill); background: var(--series-1); transition: width 600ms var(--ease); }
         .score-value { font-size: var(--t-small); font-weight: 620; color: var(--text); font-variant-numeric: tabular-nums; flex: none; }
 
-        .diversity {
-          align-items: center; text-align: center; gap: 18px; padding: 8px 0 4px;
-        }
+        .diversity { align-items: center; text-align: center; gap: 10px; padding: 6px 0 4px; }
         .diversity-cluster {
-          display: flex; flex-direction: column; align-items: center; gap: 8px;
+          display: flex; flex-direction: column; align-items: center; gap: 6px;
         }
         .diversity-title {
           font-size: var(--t-micro); font-weight: 660; letter-spacing: 0.07em;
           text-transform: uppercase; color: var(--text-3);
         }
-        .leaves { font-size: 26px; letter-spacing: 3px; line-height: 1; }
-        .leaf { opacity: 0.18; }
-        .leaf.on { opacity: 1; }
         .diversity-value {
           font-size: 34px; font-weight: 640; color: var(--text); line-height: 1;
           font-variant-numeric: tabular-nums;
         }
         .diversity .helper { max-width: 38ch; margin: 0 auto; }
       `}</style>
-    </div>
+    </>
   );
 }

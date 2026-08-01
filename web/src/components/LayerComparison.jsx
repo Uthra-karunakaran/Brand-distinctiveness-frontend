@@ -1,39 +1,35 @@
-import { quadrantMeta } from "../lib/quadrant";
-
 /* Bottom-of-page layer comparison: one pillar per layer, consistency and
  * distinctiveness as two bars growing from a shared baseline, so a reader
  * can compare all three layers' shape at a glance rather than reading three
- * separate cards top to bottom. */
+ * separate cards top to bottom. The per-layer quadrant is already shown on
+ * each row in "Why it scored this way" above -- repeating it here was noise,
+ * so this view stays to the two numbers the bars exist to compare. */
 export default function LayerComparison({ layers }) {
   if (!layers?.length) return null;
 
   return (
     <div className="pillars">
-      {layers.map((l) => {
-        const q = quadrantMeta(l.quadrant);
-        return (
-          <div className="pillar" key={l.layer}>
-            <div className="pillar-bars">
-              <div className="pillar-bar">
-                <span className="pillar-value">{l.consistency}</span>
-                <div className="pillar-track">
-                  <div className="pillar-fill" style={{ height: `${l.consistency}%`, background: "var(--series-1)" }} />
-                </div>
-                <span className="pillar-caption">Consistency</span>
+      {layers.map((l) => (
+        <div className="pillar" key={l.layer}>
+          <div className="pillar-bars">
+            <div className="pillar-bar">
+              <span className="pillar-value">{l.consistency}</span>
+              <div className="pillar-track">
+                <div className="pillar-fill" style={{ height: `${l.consistency}%`, background: "var(--series-1)" }} />
               </div>
-              <div className="pillar-bar">
-                <span className="pillar-value">{l.distinctiveness}</span>
-                <div className="pillar-track">
-                  <div className="pillar-fill" style={{ height: `${l.distinctiveness}%`, background: "var(--series-3)" }} />
-                </div>
-                <span className="pillar-caption">Distinctiveness</span>
-              </div>
+              <span className="pillar-caption">Consistency</span>
             </div>
-            <span className="pillar-title">{l.layer}</span>
-            <span className="pillar-quadrant" style={{ color: q.color }}>{q.icon} {q.label}</span>
+            <div className="pillar-bar">
+              <span className="pillar-value">{l.distinctiveness}</span>
+              <div className="pillar-track">
+                <div className="pillar-fill" style={{ height: `${l.distinctiveness}%`, background: "var(--series-3)" }} />
+              </div>
+              <span className="pillar-caption">Distinctiveness</span>
+            </div>
           </div>
-        );
-      })}
+          <span className="pillar-title">{l.layer}</span>
+        </div>
+      ))}
 
       <style>{`
         .pillars {
@@ -61,7 +57,6 @@ export default function LayerComparison({ layers }) {
         .pillar-title {
           font-size: var(--t-body); font-weight: 620; text-transform: capitalize; color: var(--text);
         }
-        .pillar-quadrant { font-size: var(--t-tiny); font-weight: 560; }
       `}</style>
     </div>
   );

@@ -231,14 +231,11 @@ export default function App() {
               </div>
 
               {/* ─────────────────────────────────── 3. writing style & tone */}
-              <div className="col-6 rise rise-3">
-                <div className="card">
-                  <div className="card-head"><h2>Structural style</h2></div>
-                  <StructuralStyle style={evidence.style} />
-                </div>
+              <div className="col-12 rise rise-3">
+                <StructuralStyle style={evidence.style} />
               </div>
 
-              <div className="col-6 rise rise-3">
+              <div className="col-12 rise rise-3">
                 <div className="card">
                   <div className="card-head"><h2>Tone analysis</h2></div>
                   <ToneAnalysis
