@@ -225,3 +225,8 @@ This is a single-process, in-memory job store and industry registry: neither sur
 - Industries are immutable by design — there is no way to fix a typo or bad entry in an already-registered industry's corpus in place. The only path is registering a new `industry_id` and re-running the brands that should use it.
 
 *Demo asset text is written for this prototype in the style of the brand, not copied from live pages.*
+
+
+Backend : https://github.com/Uthra-karunakaran/Brand-distinctiveness
+
+Logo Classifier : https://github.com/Uthra-karunakaran/Brand-distinctiveness-image-classifier
