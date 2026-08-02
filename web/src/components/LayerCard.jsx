@@ -208,7 +208,7 @@ export default function LayerCard({ layer, evidence }) {
           terms={evidence.signature_terms_used}
           empty="No brand phrases detected."
           score={sigScore}
-          scoreLabel="This layer's weight on brand phrases"
+          scoreLabel="This brand dimension's weight on brand phrases"
         />
       )}
       {tab === "Industry Buzzwords" && (
@@ -216,7 +216,7 @@ export default function LayerCard({ layer, evidence }) {
           terms={evidence.cliches_detected}
           empty="No industry buzzwords detected."
           score={clicheScore}
-          scoreLabel="This layer's weight on originality"
+          scoreLabel="This brand dimension's weight on originality"
         />
       )}
       {tab === "Word Variety" && <DiversityTab overall={evidence.lexical_diversity} />}

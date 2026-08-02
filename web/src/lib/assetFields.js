@@ -40,9 +40,9 @@ const FIELDS = {
 };
 
 const LAYER_META = {
-  identity: { label: "Identity", blurb: "The words the brand uses about itself." },
-  messaging: { label: "Messaging", blurb: "How the product is talked about across owned pages." },
-  voice: { label: "Voice", blurb: "How the brand sounds in the wild, day to day." },
+  identity: { label: "Brand Identity", blurb: "The words the brand uses about itself." },
+  messaging: { label: "How Brand Communicates", blurb: "How the product is talked about across owned pages." },
+  voice: { label: "How Brand Sounds", blurb: "How the brand sounds in the wild, day to day." },
   positioning: { label: "Positioning", blurb: "How the brand argues its place in the market." },
   proof: { label: "Proof", blurb: "Third-party evidence. Collected, but doesn't move a score." },
 };

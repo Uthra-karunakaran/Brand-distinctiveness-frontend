@@ -123,7 +123,7 @@ export function completeness(draft, schema) {
     return Array.isArray(v) ? v.length > 0 : Boolean(v && String(v).trim());
   };
 
-  const mvbfDone = schema.mvbf_fields.filter(hasField).length;
+  const coreFieldsDone = schema.mvbf_fields.filter(hasField).length;
 
   const perLayer = Object.fromEntries(
     Object.entries(schema.layers).map(([layer, fields]) => {
@@ -133,7 +133,7 @@ export function completeness(draft, schema) {
   );
 
   return {
-    mvbf: { done: mvbfDone, total: schema.mvbf_fields.length, met: mvbfDone === schema.mvbf_fields.length },
+    coreFields: { done: coreFieldsDone, total: schema.mvbf_fields.length, met: coreFieldsDone === schema.mvbf_fields.length },
     layers: perLayer,
   };
 }

@@ -22,7 +22,7 @@ export default function HeroSection({ report }) {
         <div className="hero-card">
           <span
             className="hero-card-label"
-            title="Weighted average across identity, messaging and voice: how closely this copy's language, tone and structure match the brand's own."
+            title="Weighted average across Brand Identity, How Brand Communicates and How Brand Sounds: how closely this copy's language, tone and structure match the brand's own."
           >
             On-Brand Score
           </span>
@@ -33,7 +33,7 @@ export default function HeroSection({ report }) {
         <div className="hero-card">
           <span
             className="hero-card-label"
-            title="Weighted average across identity, messaging and voice: how far this copy sits from generic category language and competitor phrasing."
+            title="Weighted average across Brand Identity, How Brand Communicates and How Brand Sounds: how far this copy sits from generic category language and competitor phrasing."
           >
             Stand-Out Score
           </span>

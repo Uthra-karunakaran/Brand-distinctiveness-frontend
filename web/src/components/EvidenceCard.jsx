@@ -2,14 +2,16 @@ import { useState } from "react";
 
 /* Section 4 -- Supporting Evidence.
  *
- * evidence.nearest_brand_chunk / nearest_generic_chunk are the two real
+ * evidence.nearest_brand_chunks / nearest_generic_chunks are the real
  * document chunks closest to the input, by cosine distance -- the concrete
  * "why" behind an abstract centroid score. Hides entirely if the API sent
  * neither, rather than rendering an empty shell.
  */
 export default function EvidenceCard({ nearestBrand, nearestGeneric }) {
   const [open, setOpen] = useState(true);
-  if (!nearestBrand && !nearestGeneric) return null;
+  const brandChunks = nearestBrand ?? [];
+  const genericChunks = nearestGeneric ?? [];
+  if (!brandChunks.length && !genericChunks.length) return null;
 
   return (
     <div className="evidence">
@@ -20,16 +22,20 @@ export default function EvidenceCard({ nearestBrand, nearestGeneric }) {
 
       {open && (
         <div className="evidence-panels">
-          {nearestBrand && (
+          {brandChunks.length > 0 && (
             <div className="bubble brand">
               <span className="bubble-label"> Sounds like the brand</span>
-              <p>“{nearestBrand}”</p>
+              {brandChunks.map((chunk, i) => (
+                <p key={i}>“{chunk}”</p>
+              ))}
             </div>
           )}
-          {nearestGeneric && (
+          {genericChunks.length > 0 && (
             <div className="bubble generic">
               <span className="bubble-label"> Generic example</span>
-              <p>“{nearestGeneric}”</p>
+              {genericChunks.map((chunk, i) => (
+                <p key={i}>“{chunk}”</p>
+              ))}
             </div>
           )}
         </div>

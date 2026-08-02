@@ -19,12 +19,12 @@ import { createDraft, loadDraft, saveDraft } from "../../state/brandDraft";
  *     draft (see state/brandDraft.js), because that draft is the only place
  *     that remembers what was actually submitted last time.
  *
- * The six MVBF fields are the only assets this screen ever writes. Industry
+ * The six core fields are the only assets this screen ever writes. Industry
  * is required on this exact call too, per the contract, so the picker lives
  * here rather than on a later screen the user might not reach before saving.
  */
 
-const MVBF_FIELDS = [
+const CORE_FIELDS = [
   { key: "name", label: "Brand name", placeholder: "Linguacore" },
   { key: "tagline", label: "Tagline", area: false, placeholder: "The one line you'd put under the logo." },
   { key: "mission", label: "Mission", area: true, placeholder: "Why the company exists today, in a sentence or two." },
@@ -94,7 +94,7 @@ export default function QuickStartPage() {
   // loaded -- the control is disabled until then rather than guessing.
   const applySample = (sample) => {
     if (!sample || !industries) return;
-    setFields((f) => ({ ...f, ...sample.mvbf }));
+    setFields((f) => ({ ...f, ...sample.coreFields }));
     setExtraAssets(sample.extraAssets);
     setFieldErrors(new Set());
 
@@ -107,7 +107,7 @@ export default function QuickStartPage() {
   };
 
   const missingRequired = useMemo(
-    () => MVBF_FIELDS.filter((f) => !fields[f.key].trim()).map((f) => f.key),
+    () => CORE_FIELDS.filter((f) => !fields[f.key].trim()).map((f) => f.key),
     [fields],
   );
   const industryMissing = !industry.id
@@ -142,7 +142,7 @@ export default function QuickStartPage() {
 
       const assets = {
         ...extraAssets,
-        ...Object.fromEntries(MVBF_FIELDS.map((f) => [f.key, fields[f.key].trim()])),
+        ...Object.fromEntries(CORE_FIELDS.map((f) => [f.key, fields[f.key].trim()])),
       };
       // Client shape only -- {text, assetType, sourceUrl}. saveEmbeddings()
       // in api/brands.js is the one place that converts to the server's
@@ -226,7 +226,7 @@ export default function QuickStartPage() {
           </div>
 
           <div className="bf-grid">
-            {MVBF_FIELDS.map((f) => (
+            {CORE_FIELDS.map((f) => (
               <div className="bf-field" key={f.key} style={f.area ? { gridColumn: "1 / -1" } : undefined}>
                 <label className="bf-label" htmlFor={`qs-${f.key}`}>
                   {f.label} <span className="bf-req">Required</span>

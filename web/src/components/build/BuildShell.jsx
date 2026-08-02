@@ -32,7 +32,7 @@ export default function BuildShell({ stage, title, subtitle, actions, onBack, ch
 
         <header className="bf-head">
           <div className="bf-head-copy">
-            <span className="ob-eyebrow">Brand build</span>
+            <span className="ob-eyebrow">Brand On Boarding</span>
             <h1>{title}</h1>
             {subtitle && <p>{subtitle}</p>}
           </div>

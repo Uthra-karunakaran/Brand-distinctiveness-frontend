@@ -166,7 +166,7 @@ export default function ScorerPage({ brand }) {
               <div className="section-head">
                 <h2 className="section-title">What's Driving This Score</h2>
                 <span className="section-sub">
-                  Per layer — {layerLabel("identity")}, {layerLabel("messaging")}, {layerLabel("voice")}
+                  Per brand dimension — {layerLabel("identity")}, {layerLabel("messaging")}, {layerLabel("voice")}
                 </span>
               </div>
               <div className="layer-list">
@@ -184,7 +184,7 @@ export default function ScorerPage({ brand }) {
             <div className="col-12 rise rise-3">
               <div className="card">
                 <div className="card-head">
-                  <h2>Personality Profile</h2>
+                  <h2 className="exp-title">Personality Profile</h2>
                   <span className="sub">Your copy vs. the brand profile</span>
                 </div>
                 <ToneAnalysis
@@ -200,8 +200,8 @@ export default function ScorerPage({ brand }) {
             <div className="col-12 rise rise-4">
               <div className="card">
                 <EvidenceCard
-                  nearestBrand={evidence.nearest_brand_chunk}
-                  nearestGeneric={evidence.nearest_generic_chunk}
+                  nearestBrand={evidence.nearest_brand_chunks}
+                  nearestGeneric={evidence.nearest_generic_chunks}
                 />
               </div>
             </div>
@@ -209,7 +209,7 @@ export default function ScorerPage({ brand }) {
             {/* ─────────────────────────────────── layer comparison */}
             <div className="col-12 rise">
               <div className="card">
-                <div className="card-head"><h2>Layer comparison</h2></div>
+                <div className="card-head"><h2>Brand Dimensions comparison</h2></div>
                 <LayerComparison layers={report.layers} />
               </div>
             </div>

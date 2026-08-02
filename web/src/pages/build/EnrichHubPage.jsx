@@ -42,6 +42,10 @@ export default function EnrichHubPage() {
   }, [brandId, draft, navigate]);
 
   const meter = useMemo(() => (schema ? completeness({ assets: working }, schema) : null), [working, schema]);
+  const visibleLayerKeys = useMemo(
+    () => (schema?.layers ? Object.keys(schema.layers).filter((l) => l !== "positioning" && l !== "proof") : []),
+    [schema],
+  );
   const dirty = useMemo(
     () => JSON.stringify(working) !== JSON.stringify(draft?.assets ?? {}),
     [working, draft],
@@ -110,10 +114,10 @@ export default function EnrichHubPage() {
       {/* ── completeness meter ── */}
       <div className="enr-meter-card">
         <div className="enr-meter-row">
-          <span className={`enr-badge ${meter.mvbf.met ? "ok" : "warn"}`}>
-            {meter.mvbf.met ? "✓" : meter.mvbf.done} MVBF {meter.mvbf.met ? "complete" : `${meter.mvbf.done}/${meter.mvbf.total}`}
+          <span className={`enr-badge ${meter.coreFields.met ? "ok" : "warn"}`}>
+            {meter.coreFields.met ? "✓" : meter.coreFields.done} Core Fields {meter.coreFields.met ? "complete" : `${meter.coreFields.done}/${meter.coreFields.total}`}
           </span>
-          {schema.layers && Object.keys(schema.layers).map((layer) => {
+          {visibleLayerKeys.map((layer) => {
             const m = meter.layers[layer];
             const scored = schema.scored_layers.includes(layer);
             return (
@@ -128,7 +132,8 @@ export default function EnrichHubPage() {
 
       {/* ── one section per layer ── */}
       <div className="enr-sections">
-        {Object.entries(schema.layers).map(([layer, keys]) => {
+        {visibleLayerKeys.map((layer) => {
+          const keys = schema.layers[layer];
           const meta = layerMeta(layer);
           const scored = schema.scored_layers.includes(layer);
           const m = meter.layers[layer];

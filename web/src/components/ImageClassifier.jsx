@@ -49,7 +49,7 @@ function DriveThumb({ src, alt, rank, className }) {
   );
 }
 
-export default function ImageClassifier() {
+export default function ImageClassifier({ onBack }) {
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [stage, setStage] = useState("idle"); // idle | searching | done
@@ -106,12 +106,20 @@ export default function ImageClassifier() {
 
   return (
     <div className="grid">
+      {onBack && (
+        <div className="col-12">
+          <button className="quiet bf-back" onClick={onBack}>← Back</button>
+        </div>
+      )}
+
       <div className="col-12">
         <div className="card">
           <div className="card-head">
-            <h2>Image Classifier</h2>
-            <span className="sub">Upload a logo to find its closest matches</span>
+            <h2>Upload a logo to find its closest matches</h2>
+            {/* <span className="sub">Upload a logo to find its closest matches</span> */}
           </div>
+
+          
 
           <div
             className={`dropzone${previewUrl ? " has-image" : ""}`}
@@ -191,11 +199,14 @@ export default function ImageClassifier() {
       )}
 
       <style>{`
+        .bf-back { align-self: flex-start; height: 30px; padding: 0 6px; margin-bottom: -8px; color: var(--text-2); }
+
         .dropzone {
           display: flex; align-items: center; justify-content: center;
           min-height: 200px; border: 1.5px dashed var(--line-strong);
           border-radius: var(--r-md); background: var(--surface-sunken);
           cursor: pointer; padding: 16px; margin-top: 4px;
+              margin-bottom: 15px;
         }
         .dropzone:hover { background: var(--surface-hover); }
         .dropzone.has-image { padding: 8px; }

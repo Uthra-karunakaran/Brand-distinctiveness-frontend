@@ -18,7 +18,7 @@ import trailforge from "./sampleData/trailforge.json";
  *                  time, so `items` is present: this exercises the "create
  *                  a new industry from competitor snippets" path.
  *
- * MVBF_KEYS is the subset Quick Start's form actually shows; everything
+ * CORE_FIELD_KEYS is the subset Quick Start's form actually shows; everything
  * else in `assets` is a later-layer field (homepage, blog, case_study...)
  * that Quick Start doesn't have inputs for but is free to submit alongside
  * the six anyway, since /embeddings accepts any asset_type in one call. That
@@ -26,7 +26,7 @@ import trailforge from "./sampleData/trailforge.json";
  * fields and carry the rest through to submission.
  */
 
-export const MVBF_KEYS = ["name", "tagline", "mission", "vision", "values", "about"];
+export const CORE_FIELD_KEYS = ["name", "tagline", "mission", "vision", "values", "about"];
 
 function toItem(raw) {
   return { text: raw.text ?? "", assetType: raw.asset_type ?? "homepage", sourceUrl: raw.source_url ?? "" };
@@ -37,7 +37,7 @@ function normalise(raw, label) {
   return {
     label,
     brandName: raw.brand_name,
-    mvbf: Object.fromEntries(MVBF_KEYS.map((k) => [k, raw.assets[k] ?? ""])),
+    coreFields: Object.fromEntries(CORE_FIELD_KEYS.map((k) => [k, raw.assets[k] ?? ""])),
     extraAssets,
     industryId: raw.generic_corpus.industry,
     industryItems: (raw.generic_corpus.items ?? []).map(toItem),

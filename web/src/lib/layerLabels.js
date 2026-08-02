@@ -4,9 +4,9 @@
  * same word instead of three independently-typed copies drifting apart.
  */
 export const LAYER_LABELS = {
-  identity: "Brand Essence",
-  messaging: "What You're Saying",
-  voice: "How You Say It",
+  identity: "Brand Identity",
+  messaging: "How Brand Communicates",
+  voice: "How Brand Sounds",
 };
 
 export function layerLabel(key) {

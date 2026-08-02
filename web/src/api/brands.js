@@ -25,7 +25,7 @@ import { JobInFlightError } from "./errors";
  *      takes the draft, not a patch; see state/brandDraft.js, which is the one
  *      place allowed to call it.
  *
- *   2. A 202 means "queued", not "valid". Missing MVBF fields, unknown
+ *   2. A 202 means "queued", not "valid". Missing core fields, unknown
  *      industries and unmapped asset types only surface later on the job. Use
  *      pollJob() and branch on the terminal job's error.code -- never treat a
  *      resolved POST as a successful save.

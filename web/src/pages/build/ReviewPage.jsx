@@ -6,7 +6,7 @@ import { layerMeta } from "../../lib/assetFields";
 
 /* Step 7: GET /brands/{id}, server-authoritative. Everything here is what the
  * LAST SUCCESSFUL job actually produced -- not the current form state, which
- * may have unsaved edits sitting in the enrichment hub. mvbf.met in
+ * may have unsaved edits sitting in the enrichment hub. Core-fields status in
  * particular is deliberately re-read from the server rather than computed
  * from local state, because the local completeness meter can only ever
  * describe what's IN the form, not what the last build actually accepted.
@@ -88,10 +88,10 @@ export default function ReviewPage() {
       <div className="rvw-grid">
         <section className="bf-section">
           <div className="bf-section-head">
-            <div><h3>MVBF status</h3></div>
+            <div><h3>Core Fields status</h3></div>
           </div>
-          <div className={`rvw-mvbf ${brand.mvbf.met ? "ok" : "warn"}`}>
-            <span className="rvw-mvbf-icon" aria-hidden="true">{brand.mvbf.met ? "✓" : "!"}</span>
+          <div className={`rvw-status ${brand.mvbf.met ? "ok" : "warn"}`}>
+            <span className="rvw-status-icon" aria-hidden="true">{brand.mvbf.met ? "✓" : "!"}</span>
             <div>
               <strong>{brand.mvbf.met ? "Complete" : "Incomplete"}</strong>
               {!brand.mvbf.met && brand.mvbf.missing_fields?.length > 0 && (
@@ -105,8 +105,8 @@ export default function ReviewPage() {
           <div className="bf-section-head">
             <div><h3>Scorable</h3></div>
           </div>
-          <div className={`rvw-mvbf ${brand.scorable ? "ok" : "warn"}`}>
-            <span className="rvw-mvbf-icon" aria-hidden="true">{brand.scorable ? "✓" : "!"}</span>
+          <div className={`rvw-status ${brand.scorable ? "ok" : "warn"}`}>
+            <span className="rvw-status-icon" aria-hidden="true">{brand.scorable ? "✓" : "!"}</span>
             <div><strong>{brand.scorable ? "Yes" : "Not yet"}</strong><p>{brand.scorable_message}</p></div>
           </div>
         </section>
@@ -114,12 +114,12 @@ export default function ReviewPage() {
         <section className="bf-section rvw-span">
           <div className="bf-section-head">
             <div>
-              <h3>Layers</h3>
+              <h3>Brand Dimensions</h3>
               <p>What's actually contributing to a score, vs. collected for later.</p>
             </div>
           </div>
           <div className="rvw-layers">
-            {Object.keys(schema.layers).map((layer) => {
+            {Object.keys(schema.layers).filter((layer) => layer !== "positioning" && layer !== "proof").map((layer) => {
               const present = brand.layers_present.includes(layer);
               const scored = scoredSet.has(layer);
               return (
@@ -187,15 +187,15 @@ export default function ReviewPage() {
         .rvw-span { grid-column: 1 / -1; }
         @media (max-width: 760px) { .rvw-grid { grid-template-columns: 1fr; } }
 
-        .rvw-mvbf { display: flex; align-items: flex-start; gap: 12px; }
-        .rvw-mvbf-icon {
+        .rvw-status { display: flex; align-items: flex-start; gap: 12px; }
+        .rvw-status-icon {
           flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
           font-size: 13px; font-weight: 700;
         }
-        .rvw-mvbf.ok .rvw-mvbf-icon { background: color-mix(in srgb, var(--positive) 14%, transparent); color: var(--positive); }
-        .rvw-mvbf.warn .rvw-mvbf-icon { background: color-mix(in srgb, var(--series-2) 14%, transparent); color: var(--series-2); }
-        .rvw-mvbf p { margin: 2px 0 0; font-size: var(--t-small); color: var(--text-2); }
-        .rvw-mvbf strong { color: var(--text); }
+        .rvw-status.ok .rvw-status-icon { background: color-mix(in srgb, var(--positive) 14%, transparent); color: var(--positive); }
+        .rvw-status.warn .rvw-status-icon { background: color-mix(in srgb, var(--series-2) 14%, transparent); color: var(--series-2); }
+        .rvw-status p { margin: 2px 0 0; font-size: var(--t-small); color: var(--text-2); }
+        .rvw-status strong { color: var(--text); }
 
         .rvw-layers { display: flex; flex-direction: column; gap: 10px; }
         .rvw-layer {
