@@ -9,7 +9,11 @@ import react from '@vitejs/plugin-react'
 // src/api.js therefore defaults to the relative base "/api". Override with
 // VITE_API_BASE for a build served somewhere the proxy does not exist (that
 // deployment needs CORS configured on the API instead).
-const API_TARGET = process.env.VITE_API_TARGET ?? 'http://127.0.0.1:8001'
+const API_TARGET = process.env.VITE_API_TARGET ?? 'http://127.0.0.1:8000'
+
+// Same story for the image classifier's search API (src/lib/classifierApi.js),
+// a separate service on its own port.
+const CLASSIFIER_API_TARGET = process.env.VITE_CLASSIFIER_API_TARGET ?? 'http://127.0.0.1:8002'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -20,6 +24,11 @@ export default defineConfig({
         target: API_TARGET,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/classifier-api': {
+        target: CLASSIFIER_API_TARGET,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/classifier-api/, ''),
       },
     },
   },

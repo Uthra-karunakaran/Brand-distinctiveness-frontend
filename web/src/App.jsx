@@ -3,6 +3,7 @@ import { fetchBrands, scoreCopy } from "./api";
 import EvidenceCard from "./components/EvidenceCard";
 import FinalSummary from "./components/FinalSummary";
 import HeroSection from "./components/HeroSection";
+import ImageClassifier from "./components/ImageClassifier";
 import LayerCard from "./components/LayerCard";
 import LayerComparison from "./components/LayerComparison";
 import StructuralStyle from "./components/StructuralStyle";
@@ -193,8 +194,26 @@ export default function App() {
                 </svg>
                 Add brand
               </button>
+
+              <button className="ghost" onClick={() => setView("classifier")}>
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.4" />
+                  <circle cx="6" cy="6.5" r="1.3" stroke="currentColor" strokeWidth="1.2" />
+                  <path d="M3.4 12.2 7 8.4l2 2 2.3-2.6 1.3 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Image classifier
+              </button>
             </>
           )}
+
+          {/* {view === "classifier" && (
+            <button className="ghost" onClick={() => setView("scorer")}>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M7.5 2.5 3 6l4.5 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Back to scorer
+            </button>
+          )} */}
 
           {/* Theme: three states, all visible at once. A dropdown hid two of
               them behind a click for a control people flip constantly. */}
@@ -225,6 +244,12 @@ export default function App() {
                flow until POST /brands/onboard exists. */
             onDone={() => setView("scorer")}
           />
+        </main>
+      )}
+
+      {view === "classifier" && (
+        <main className="page">
+          <ImageClassifier />
         </main>
       )}
 

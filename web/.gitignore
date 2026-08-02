@@ -17,6 +17,11 @@ dist-ssr
 .env.*
 !.env.example
 
+# Google OAuth / API credentials must never be committed
+client_secret*.json
+*.apps.googleusercontent.com.json
+token.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
