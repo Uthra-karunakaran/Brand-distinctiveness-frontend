@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rl \"8002\\\\|FOLDER_ID\\\\|drive.google.com\\\\|MediaFileUpload\\\\|service_account\\\\|googleapiclient\" /Users/uthra/Brand-distinctiveness-prototype 2>/dev/null | grep -v __pycache__ | head -50)",
+      "Read(//Users/uthra/Brand-distinctiveness-prototype/**)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(open\\('web/client_secret_398226957237-0e32kkihd8iaqo3s4iq48cu41g57sklt.apps.googleusercontent.com.json'\\)\\); print\\(list\\(d.keys\\(\\)\\)\\); k=list\\(d.values\\(\\)\\)[0]; print\\(list\\(k.keys\\(\\)\\)\\)\")",
+      "Bash(npx oxlint *)",
+      "Bash(npm run *)",
+      "Bash(node -e ' *)",
+      "Bash(lsof -iTCP -sTCP:LISTEN -P)"
+    ]
+  }
+}
