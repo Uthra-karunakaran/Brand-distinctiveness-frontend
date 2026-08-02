@@ -9,7 +9,7 @@ import react from '@vitejs/plugin-react'
 // src/api.js therefore defaults to the relative base "/api". Override with
 // VITE_API_BASE for a build served somewhere the proxy does not exist (that
 // deployment needs CORS configured on the API instead).
-const API_TARGET = process.env.VITE_API_TARGET ?? 'http://127.0.0.1:8001'
+const API_TARGET = process.env.VITE_API_TARGET ?? 'http://127.0.0.1:8000'
 
 // https://vite.dev/config/
 export default defineConfig({
