@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { fetchBrands, scoreCopy } from "./api";
 import EvidenceCard from "./components/EvidenceCard";
@@ -19,6 +20,24 @@ import { layerLabel } from "./lib/layerLabels";
  * is invented to fill a gap the API leaves, and there is no composite score:
  * the two axes the API actually reports -- consistency and distinctiveness --
  * are what every section shows. */
+
+import { useEffect, useMemo, useState } from "react";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { fetchBrands } from "./api";
+import ScorerPage from "./pages/ScorerPage";
+import BuildingPage from "./pages/build/BuildingPage";
+import CompetitorsPage from "./pages/build/CompetitorsPage";
+import EnrichHubPage from "./pages/build/EnrichHubPage";
+import QuickStartPage from "./pages/build/QuickStartPage";
+import ReviewPage from "./pages/build/ReviewPage";
+
+/* The app shell: topbar (shared by every route) plus the router. The scorer
+ * (existing GET /brands + POST /brands/{slug}/score, still slug-scoped) lives
+ * at "/"; the seven-endpoint brand-build flow lives under /brands/*. They are
+ * two different backends today -- the scorer's /brands is unrelated to the
+ * build flow's POST /brands -- and are kept as two page trees rather than
+ * threaded together until the scorer is migrated onto brand_id itself. */
+
 
 const THEMES = [
   {
@@ -59,21 +78,13 @@ const THEMES = [
 ];
 
 export default function App() {
-  const [text, setText] = useState(DEMO_TEXTS[0].text);
-  const [preset, setPreset] = useState("0");
   const [brandId, setBrandId] = useState(null);
   const [brands, setBrands] = useState([]);
-
-  const [report, setReport] = useState(null);
-  const [pending, setPending] = useState(false);
-  const [error, setError] = useState(null);
-  const [editing, setEditing] = useState(true);
   const [theme, setTheme] = useState("auto");
 
-  // Two screens, one shell. Onboarding is a full-page task, so it replaces the
-  // scorer rather than opening in a modal over it -- a nine-field form in a
-  // dialog is a form you cannot leave and come back to.
-  const [view, setView] = useState("scorer");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const onScorer = location.pathname === "/";
 
   useEffect(() => {
     fetchBrands().then((list) => {
@@ -89,59 +100,11 @@ export default function App() {
     else document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
-  const run = useCallback(async () => {
-    if (!text.trim() || !brand) return;
-    setPending(true);
-    setError(null);
-    try {
-      const result = await scoreCopy({ slug: brand.slug, text });
-      setReport(result);
-      setEditing(false);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setPending(false);
-    }
-  }, [text, brand]);
-
-  // Scope changed while a result is showing -- re-score automatically. Without
-  // this the input has already collapsed to one line, so there is no visible
-  // Analyse button to press after switching brands.
-  const firstRender = useRef(true);
-  useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
-    if (report) run();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brandId]);
-
-  useEffect(() => {
-    const onKey = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
-        e.preventDefault();
-        run();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [run]);
-
-  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-  const evidence = report?.evidence ?? {};
-
-  // "Overall tone alignment" is the API's own tone contribution value, not a
-  // number computed here -- it is identical across layers (tone is scored
-  // once per document), so any layer that carries it is the source.
-  const toneAlignment = report?.layers?.find((l) => l.contributions?.consistency?.tone)
-    ?.contributions.consistency.tone.value ?? null;
-
   return (
     <>
       <header className="topbar">
         <div className="topbar-inner">
-          <span className="wordmark">
+          <Link to="/" className="wordmark" style={{ textDecoration: "none", color: "inherit" }}>
             {/* Same geometry as public/favicon.svg -- keep the two in sync. */}
             <span className="mark" aria-hidden="true">
               <svg width="15" height="15" viewBox="0 0 32 32" fill="none">
@@ -157,13 +120,13 @@ export default function App() {
               </svg>
             </span>
             Locify
-          </span>
+          </Link>
 
           <span className="spacer" />
 
-          {/* The brand picker belongs to the scorer; during onboarding there
-              is nothing to pick between yet. */}
-          {view === "scorer" && (
+          {/* The brand picker belongs to the scorer; the build flow has its
+              own brand-scoped URL and doesn't need a second selector. */}
+          {onScorer && (
             <>
               {/* Brand: a native select kept for keyboard and mobile behaviour,
                   wearing a leading icon so it reads as "which brand" without a
@@ -188,7 +151,7 @@ export default function App() {
                 </select>
               </label>
 
-              <button className="ghost" onClick={() => setView("onboard")}>
+              <button className="ghost" onClick={() => navigate("/brands/new")}>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                   <path d="M6 2.2v7.6M2.2 6h7.6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
                 </svg>
@@ -234,6 +197,7 @@ export default function App() {
           </div>
         </div>
       </header>
+
 
       {view === "onboard" && (
         <main className="page">
@@ -432,6 +396,17 @@ export default function App() {
         .section-sub { font-size: var(--t-small); color: var(--text-3); }
         .layer-list { display: flex; flex-direction: column; gap: 12px; }
       `}</style>
+
+      <Routes>
+        <Route path="/" element={<ScorerPage brand={brand} />} />
+        <Route path="/brands/new" element={<QuickStartPage />} />
+        <Route path="/brands/:brandId/quick-start" element={<QuickStartPage />} />
+        <Route path="/brands/:brandId/building" element={<BuildingPage />} />
+        <Route path="/brands/:brandId/enrich" element={<EnrichHubPage />} />
+        <Route path="/brands/:brandId/competitors" element={<CompetitorsPage />} />
+        <Route path="/brands/:brandId/review" element={<ReviewPage />} />
+      </Routes>
+
     </>
   );
 }
