@@ -1,0 +1,5 @@
+# This is a temporary demo deployment sitting behind IP/rate limiting rather
+# than auth — keeping crawlers out avoids random indexed traffic eating into
+# that budget.
+User-agent: *
+Disallow: /

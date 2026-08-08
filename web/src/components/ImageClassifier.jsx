@@ -12,6 +12,10 @@ const STAGE_LABEL = {
 const THUMB_STAGGER_MS = 250;
 const THUMB_RETRY_DELAYS_MS = [1000, 3000, 6000];
 
+// Rejecting oversized uploads before they leave the browser keeps large
+// payloads off a rate-limited, temp-storage backend.
+const MAX_FILE_SIZE_BYTES = 8 * 1024 * 1024;
+
 function DriveThumb({ src, alt, rank, className }) {
   const [attempt, setAttempt] = useState(-1); // -1 = not started (staggering)
   const [failed, setFailed] = useState(false);
@@ -59,6 +63,10 @@ export default function ImageClassifier({ onBack }) {
 
   const pickFile = useCallback((f) => {
     if (!f || !f.type.startsWith("image/")) return;
+    if (f.size > MAX_FILE_SIZE_BYTES) {
+      setError(`That image is too large — please choose one under ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB.`);
+      return;
+    }
     setFile(f);
     setPreviewUrl((prev) => {
       if (prev) URL.revokeObjectURL(prev);

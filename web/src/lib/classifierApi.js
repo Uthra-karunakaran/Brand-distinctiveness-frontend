@@ -13,6 +13,9 @@ const BASE = import.meta.env.VITE_CLASSIFIER_API_BASE ?? "/classifier-api";
 const http = axios.create({ baseURL: BASE, timeout: 60_000 });
 
 function message(error) {
+  if (error.response?.status === 429) {
+    return "You're going a bit fast — wait a moment and try again.";
+  }
   if (error.response?.data?.detail) {
     const { detail } = error.response.data;
     return typeof detail === "string" ? detail : JSON.stringify(detail);

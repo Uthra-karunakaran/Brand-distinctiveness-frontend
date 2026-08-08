@@ -1,0 +1,5 @@
+# react-router-dom uses BrowserRouter, so a static host needs to fall back to
+# index.html for any path it doesn't have a file for — otherwise a refresh or
+# direct link on a non-root route 404s. This line must stay last: Netlify and
+# Render both match _redirects rules in order, first match wins.
+/*    /index.html   200

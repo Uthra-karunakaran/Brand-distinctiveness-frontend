@@ -11,6 +11,11 @@ import WarningsBanner from "../components/WarningsBanner";
 import { DEMO_TEXTS } from "../lib/demo";
 import { layerLabel } from "../lib/layerLabels";
 
+// A generous cap for a paste-in of marketing copy — high enough that no
+// legitimate use hits it, low enough to stop someone lobbing a huge blob of
+// text at the scorer per request.
+const MAX_TEXT_LENGTH = 4000;
+
 /* Every value on this page is either a field straight off the Report the
  * scoring API returns, or a presentation-only transform of one (a colour, a
  * percentage rounding, a fixed sentence keyed off a quadrant string). Nothing
@@ -109,6 +114,7 @@ export default function ScorerPage({ brand }) {
                   onChange={(e) => setText(e.target.value)}
                   placeholder="Paste marketing copy…"
                   aria-label="Copy to analyse"
+                  maxLength={MAX_TEXT_LENGTH}
                 />
                 <div className="run-row">
                   <button onClick={run} disabled={pending || !text.trim() || !brand}>
