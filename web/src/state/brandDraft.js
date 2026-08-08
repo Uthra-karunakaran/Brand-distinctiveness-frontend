@@ -32,17 +32,14 @@ function storageKey(brandId) {
 }
 
 /* Drafts saved before saveEmbeddings() became the sole shape-converter could
- * have server-shaped items ({asset_type, source_url}) persisted where client
- * shape ({assetType, sourceUrl}) belongs -- reading one of those back and
- * re-editing it crashed on `.sourceUrl.trim()`. Heal it transparently on
- * load rather than requiring anyone to clear localStorage by hand. */
+ * have server-shaped items ({asset_type}) persisted where client shape
+ * ({assetType}) belongs -- heal it transparently on load. */
 function normaliseIndustry(industry) {
   if (!industry) return { id: null, items: null };
   const items = (industry.items ?? [])
     .map((it) => ({
       text: it.text ?? "",
       assetType: it.assetType ?? it.asset_type ?? "",
-      sourceUrl: it.sourceUrl ?? it.source_url ?? "",
     }))
     .filter((it) => it.text.trim());
   return { id: industry.id ?? null, items: industry.items == null ? null : items };

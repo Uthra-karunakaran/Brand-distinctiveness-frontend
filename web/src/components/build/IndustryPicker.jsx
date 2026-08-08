@@ -44,7 +44,7 @@ export default function IndustryPicker({ industries, assetTypes, value, onChange
 
   const items = value.items ?? [];
   const setItems = (items) => onChange({ ...value, items });
-  const addItem = () => setItems([...items, { text: "", assetType: assetTypes[0] ?? "homepage", sourceUrl: "" }]);
+  const addItem = () => setItems([...items, { text: "", assetType: assetTypes[0] ?? "homepage" }]);
   const updateItem = (i, patch) => setItems(items.map((it, j) => (j === i ? { ...it, ...patch } : it)));
   const removeItem = (i) => setItems(items.filter((_, j) => j !== i));
 
@@ -123,12 +123,6 @@ export default function IndustryPicker({ industries, assetTypes, value, onChange
                     >
                       {assetTypes.map((t) => <option key={t} value={t}>{t.replace(/_/g, " ")}</option>)}
                     </select>
-                    <input
-                      type="text" value={item.sourceUrl}
-                      onChange={(e) => updateItem(i, { sourceUrl: e.target.value })}
-                      placeholder="Source URL (optional)"
-                      aria-label={`Snippet ${i + 1} source URL`}
-                    />
                     <button
                       type="button" className="quiet indp-item-remove"
                       onClick={() => removeItem(i)} aria-label={`Remove snippet ${i + 1}`}

@@ -29,7 +29,7 @@ import trailforge from "./sampleData/trailforge.json";
 export const CORE_FIELD_KEYS = ["name", "tagline", "mission", "vision", "values", "about"];
 
 function toItem(raw) {
-  return { text: raw.text ?? "", assetType: raw.asset_type ?? "homepage", sourceUrl: raw.source_url ?? "" };
+  return { text: raw.text ?? "", assetType: raw.asset_type ?? "homepage" };
 }
 
 function normalise(raw, label) {

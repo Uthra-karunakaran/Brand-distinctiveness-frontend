@@ -85,15 +85,13 @@ export async function createBrand(brandName) {
  * a partial payload is a silent delete, so the shape of this function is the
  * guard against writing one by accident.
  *
- * draft.industry.items is always CLIENT shape here -- {text, assetType,
- * sourceUrl}, whatever IndustryPicker produced -- and this is the one and
- * only place that converts it to the server's {text, asset_type, source_url}.
- * That conversion must not happen anywhere else: if a caller converted and
- * then handed the SERVER-shaped object to saveDraft(), it would get persisted
- * into the draft verbatim, and the next read of draft.industry.items would be
- * server-shaped where every other piece of code expects client-shaped --
- * exactly the bug (`sourceUrl` undefined -> `.trim()` on undefined) this
- * comment is here to stop someone reintroducing. */
+ * draft.industry.items is always CLIENT shape here -- {text, assetType},
+ * whatever IndustryPicker produced -- and this is the one and only place that
+ * converts it to the server's {text, asset_type}. That conversion must not
+ * happen anywhere else: if a caller converted and then handed the SERVER-shaped
+ * object to saveDraft(), it would get persisted into the draft verbatim, and
+ * the next read of draft.industry.items would be server-shaped where every
+ * other piece of code expects client-shaped. */
 export async function saveEmbeddings(draft) {
   const items = (draft.industry.items ?? []).filter((it) => it.text?.trim());
   const payload = {
@@ -105,7 +103,6 @@ export async function saveEmbeddings(draft) {
         items: items.map((it) => ({
           text: it.text.trim(),
           asset_type: it.assetType,
-          source_url: it.sourceUrl?.trim() || undefined,
         })),
       }
       : { industry: draft.industry.id },
