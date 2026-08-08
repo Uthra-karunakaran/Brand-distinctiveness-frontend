@@ -70,6 +70,14 @@ export default function App() {
     });
   }, []);
 
+  useEffect(() => {
+    if (!onScorer) return;
+    fetchBrands().then((list) => {
+      setBrands(list);
+      if (list.length && !brandId) setBrandId(list[0].id);
+    });
+  }, [onScorer]);
+
   const brand = useMemo(() => brands.find((b) => b.id === brandId), [brands, brandId]);
 
   useEffect(() => {
