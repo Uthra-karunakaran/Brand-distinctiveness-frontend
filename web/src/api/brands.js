@@ -1,5 +1,6 @@
 import axios from "axios";
 import { JobInFlightError } from "./errors";
+import { getVisitorId } from "../lib/visitorId";
 
 /* Brand-build API client -- the seven endpoints of the build flow, called for
  * real. No mock, no stub branch: every function here is a straight axios call
@@ -33,7 +34,16 @@ import { JobInFlightError } from "./errors";
 
 const BASE = import.meta.env.VITE_API_BASE ?? "/api";
 
-const http = axios.create({ baseURL: BASE, timeout: 60_000 });
+// X-Client-Key/X-Visitor-Id are non-secret signal headers, not auth -- see
+// platform_admin.py on the backend for what they're actually used for.
+const http = axios.create({
+  baseURL: BASE,
+  timeout: 60_000,
+  headers: {
+    "X-Client-Key": import.meta.env.VITE_CLIENT_KEY ?? "",
+    "X-Visitor-Id": getVisitorId(),
+  },
+});
 
 /* The exact stage sequence the backend reports. The progress bar is driven off
  * this list and the job's own `stage` string -- not off invented steps, which

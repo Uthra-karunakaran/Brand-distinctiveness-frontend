@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getVisitorId } from "./lib/visitorId";
 
 /* The Locify scorer API.
  *
@@ -16,7 +17,16 @@ import axios from "axios";
 // from the browser fails before it reaches the network.
 const BASE = import.meta.env.VITE_API_BASE ?? "/api";
 
-const http = axios.create({ baseURL: BASE, timeout: 120_000 });
+// X-Client-Key/X-Visitor-Id are non-secret signal headers, not auth -- see
+// platform_admin.py on the backend for what they're actually used for.
+const http = axios.create({
+  baseURL: BASE,
+  timeout: 120_000,
+  headers: {
+    "X-Client-Key": import.meta.env.VITE_CLIENT_KEY ?? "",
+    "X-Visitor-Id": getVisitorId(),
+  },
+});
 
 function message(error) {
   if (error.response?.status === 429) {

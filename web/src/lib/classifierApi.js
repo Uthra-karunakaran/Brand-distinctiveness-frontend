@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getVisitorId } from "./visitorId";
 
 /* The logo/image classifier search API -- a separate service from the copy
  * scorer in api.js. POST /search takes the image itself (multipart) and
@@ -10,7 +11,16 @@ import axios from "axios";
 // search service (see vite.config.js), same trick as api.js uses for /api.
 const BASE = import.meta.env.VITE_CLASSIFIER_API_BASE ?? "/classifier-api";
 
-const http = axios.create({ baseURL: BASE, timeout: 60_000 });
+// X-Client-Key/X-Visitor-Id are non-secret signal headers, not auth -- see
+// platform_admin.py on the backend for what they're actually used for.
+const http = axios.create({
+  baseURL: BASE,
+  timeout: 60_000,
+  headers: {
+    "X-Client-Key": import.meta.env.VITE_CLIENT_KEY ?? "",
+    "X-Visitor-Id": getVisitorId(),
+  },
+});
 
 function message(error) {
   if (error.response?.status === 429) {

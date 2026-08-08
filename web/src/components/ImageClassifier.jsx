@@ -151,6 +151,11 @@ export default function ImageClassifier({ onBack }) {
             )}
           </div>
 
+          <p className="demo-note">
+            Demo only — your image isn't stored, and anonymous usage stats are
+            collected. Please don't upload anything confidential.
+          </p>
+
           <div className="run-row">
             <button onClick={run} disabled={!file || busy}>
               {busy ? (
@@ -208,6 +213,7 @@ export default function ImageClassifier({ onBack }) {
 
       <style>{`
         .bf-back { align-self: flex-start; height: 30px; padding: 0 6px; margin-bottom: -8px; color: var(--text-2); }
+        .demo-note { margin: -8px 0 12px; font-size: var(--t-tiny); color: var(--text-3); line-height: 1.5; }
 
         .dropzone {
           display: flex; align-items: center; justify-content: center;

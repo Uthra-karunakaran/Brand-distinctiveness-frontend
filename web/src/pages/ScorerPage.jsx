@@ -124,6 +124,9 @@ export default function ScorerPage({ brand }) {
                     <button className="quiet" onClick={() => setEditing(false)}>Cancel</button>
                   )}
                 </div>
+                <p className="demo-note">
+                 Demo only. Your text isn’t stored. Tone analysis may be processed by a third-party LLM, and anonymous usage statistics may be collected. Please avoid entering confidential information.
+                </p>
               </>
             ) : (
               <button className="collapsed" onClick={() => setEditing(true)}>
@@ -230,6 +233,7 @@ export default function ScorerPage({ brand }) {
 
       <style>{`
         .run-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+        .demo-note { margin: 10px 0 0; font-size: var(--t-tiny); color: var(--text-3); line-height: 1.5; }
 
         .collapsed {
           white-space: normal;
