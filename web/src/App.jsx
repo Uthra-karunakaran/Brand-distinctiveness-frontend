@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { fetchBrands } from "./api";
-import ImageClassifier from "./components/ImageClassifier";
+// import ImageClassifier from "./components/ImageClassifier";
 import ScorerPage from "./pages/ScorerPage";
 import BuildingPage from "./pages/build/BuildingPage";
 import CompetitorsPage from "./pages/build/CompetitorsPage";
@@ -135,14 +135,14 @@ export default function App() {
                 Add brand
               </button>
 
-              <button className="ghost" onClick={() => navigate("/classifier")}>
+              {/* <button className="ghost" onClick={() => navigate("/classifier")}>
                 <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.4" />
                   <circle cx="6" cy="6.5" r="1.3" stroke="currentColor" strokeWidth="1.2" />
                   <path d="M3.4 12.2 7 8.4l2 2 2.3-2.6 1.3 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 Logo classifier
-              </button>
+              </button> */}
             </>
           )}
 
@@ -168,7 +168,7 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<ScorerPage brand={brand} />} />
-        <Route path="/classifier" element={<main className="page"><ImageClassifier onBack={() => navigate("/")} /></main>} />
+        {/* <Route path="/classifier" element={<main className="page"><ImageClassifier onBack={() => navigate("/")} /></main>} /> */}
         <Route path="/brands/new" element={<QuickStartPage />} />
         <Route path="/brands/:brandId/quick-start" element={<QuickStartPage />} />
         <Route path="/brands/:brandId/building" element={<BuildingPage />} />
